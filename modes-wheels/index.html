@@ -1,0 +1,65 @@
+<html>
+<head>
+<link rel="stylesheet" href="modes-wheel.css" />
+<style>
+  #major-scale-modes-wheel {
+    position: absolute;
+    left: 20px;
+    top: 20px;
+  }
+
+  #harmonic-major-scale-modes-wheel {
+    position: absolute;
+    left: 440px;
+    top: 20px;
+  }
+
+  #harmonic-minor-scale-modes-wheel {
+    position: absolute;
+    left: 20px;
+    top: 440px;
+  }
+
+  #melodic-minor-scale-modes-wheel {
+    position: absolute;
+    left: 440px;
+    top: 440px;
+  }
+</style>
+<script type="module">
+  import {
+    ModesWheel,
+    majorScaleFlags, harmonicMinorScaleFlags, harmonicMajorScaleFlags, melodicMinorScaleFlags,
+    majorScaleModes, harmonicMinorScaleModes, harmonicMajorScaleModes, melodicMinorScaleModes
+  } from "./modes-wheel.js";
+
+  const colors = ['orange', 'yellow', 'lightgreen', 'lightblue', 'pink', 'wheat', 'magenta'];
+
+  window.addEventListener('load', () => {
+    const majorScaleModesWheelDiv = document.getElementById('major-scale-modes-wheel');
+    const majorScaleModesWheel = ModesWheel('<br />major', majorScaleFlags, majorScaleModes, colors, majorScaleModesWheelDiv);
+    majorScaleModesWheelDiv.appendChild(majorScaleModesWheel.getParentDiv());
+
+    const harmonicMajorScaleModesWheelDiv = document.getElementById('harmonic-major-scale-modes-wheel');
+    const harmonicMajorScaleModesWheel = ModesWheel('<br />harmonic<br />major', harmonicMajorScaleFlags, harmonicMajorScaleModes, colors, harmonicMajorScaleModesWheelDiv);
+    harmonicMajorScaleModesWheelDiv.appendChild(harmonicMajorScaleModesWheel.getParentDiv());
+
+    const harmonicMinorScaleModesWheelDiv = document.getElementById('harmonic-minor-scale-modes-wheel');
+    const harmonicMinorScaleModesWheel = ModesWheel('<br />harmonic<br />minor', harmonicMinorScaleFlags, harmonicMinorScaleModes, colors, harmonicMinorScaleModesWheelDiv);
+    harmonicMinorScaleModesWheelDiv.appendChild(harmonicMinorScaleModesWheel.getParentDiv());
+
+    const melodicMinorScaleModesWheelDiv = document.getElementById('melodic-minor-scale-modes-wheel');
+    const melodicMinorScaleModesWheel = ModesWheel('<br />melodic</br />minor', melodicMinorScaleFlags, melodicMinorScaleModes, colors, melodicMinorScaleModesWheelDiv);
+    melodicMinorScaleModesWheelDiv.appendChild(melodicMinorScaleModesWheel.getParentDiv());
+  });
+
+</script>
+</head>
+<body>
+<div id="major-scale-modes-wheel"></div>
+<div id="harmonic-major-scale-modes-wheel"></div>
+<div id="harmonic-minor-scale-modes-wheel"></div>
+<div id="melodic-minor-scale-modes-wheel"></div>
+</body>
+
+</html>

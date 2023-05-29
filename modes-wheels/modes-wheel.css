@@ -1,0 +1,145 @@
+:root {
+  --mode-wheel-size: 400;
+  --mode-width: 60;
+
+  /* Expression prevents javascript from reading computed val  */
+  /*--key-wheel-size: calc(var(--mode-wheel-size) - 100);*/
+  --key-wheel-size: 320;
+
+  /* calculate dodecagon side length from inner radius // 2r tan(π/n) // 2 * (--key-wheel-size / 2) * Math.tan(Math.PI/12) */
+  --key-width: 0;
+  --key-center-wheel-size: 100;
+  --center-wheel-size: 70;
+}
+
+* {
+  box-sizing: border-box;
+  font-family: "Lucida Grande", sans-serif;
+}
+
+.modes-wheel-parent {
+  position: absolute;
+  width: calc(var(--key-wheel-size) * 1px);
+}
+
+.mode-wheel {
+  position: absolute;
+  width: calc(var(--mode-wheel-size) * 1px);
+  height: calc(var(--mode-wheel-size) * 1px);
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px black;
+  background: aliceblue;
+}
+
+.mode {
+  position: absolute;
+  left: calc(((var(--mode-wheel-size) / 2) - (var(--mode-width) / 2)) * 1px);
+  width: calc(var(--mode-width) * 1px);
+  height: calc((var(--mode-wheel-size) / 2) * 1px);
+  text-align: center;
+  font-size: 12px;
+  font-weight: bold;
+  box-shadow: 0 0 0 2px black;
+  transform-origin: bottom center;
+}
+
+.key-wheel {
+  background: white;
+  position: absolute;
+  left: calc(((var(--mode-wheel-size) - var(--key-wheel-size)) / 2) * 1px);
+  top: calc(((var(--mode-wheel-size) - var(--key-wheel-size)) / 2) * 1px);
+  width: calc(var(--key-wheel-size) * 1px);
+  height: calc(var(--key-wheel-size) * 1px);
+  border-radius: 50%;
+}
+
+.key {
+  position: absolute;
+  left: calc(((var(--key-wheel-size) / 2) - (var(--key-width) / 2)) * 1px);
+  top: 0;
+  width: calc(var(--key-width) * 1px);
+  height: calc((var(--key-wheel-size) / 2) * 1px);
+  border-left: calc((var(--key-width) / 2) * 1px) solid transparent;
+  border-right: calc((var(--key-width) / 2) * 1px) solid transparent;
+  background: transparent;
+  transform-origin: bottom center;
+}
+
+.key-diatonic {
+  border-top: calc((var(--key-wheel-size) / 2) * 1px) solid white;
+}
+.key-accidental {
+  border-top: calc((var(--key-wheel-size) / 2) * 1px) solid black;
+}
+
+.key-label {
+  position: absolute;
+  left: calc(((var(--key-wheel-size) / 2) - (var(--key-width) / 2)) * 1px);
+  top: 0;
+  width: calc(var(--key-width) * 1px);
+  height: calc((var(--key-wheel-size) / 2) * 1px);
+  text-align: center;
+  transform-origin: bottom center;
+  z-index: 460;
+  font-size: 18px;
+  font-weight: bold;
+  color: black;
+}
+
+.key-label-diatonic {
+  color: black;
+}
+
+.key-label-accidental {
+  color: white;
+}
+
+.key-left-divider-diatonic {
+  position: absolute;
+  z-index: 450;
+  left: calc((var(--key-wheel-size) / 2) * 1px);
+  top: 1px;
+  width: 0;
+  height: calc(((var(--key-wheel-size) / 2) - 1) * 1px); /* ?? */
+  box-shadow: 0 0 0 1px black;
+  transform-origin: bottom center;
+}
+
+.key-left-divider-accidental {
+  position: absolute;
+  z-index: 450;
+  left: calc((var(--key-wheel-size) / 2) * 1px);
+  top: 100px;
+  width: 0;
+  height: calc(((var(--key-wheel-size) / 2) - 100) * 1px); /* ?? */
+  box-shadow: 0 0 0 1px black;
+  transform-origin: bottom center;
+}
+
+.key-center-wheel {
+  position: absolute;
+  left: calc(50% - ((var(--key-center-wheel-size) / 2) * 1px));
+  top: calc(50% - ((var(--key-center-wheel-size) / 2) * 1px));
+  width: calc(var(--key-center-wheel-size) * 1px);
+  height: calc(var(--key-center-wheel-size) * 1px);
+  background: white;
+  border-radius: 50%;
+  box-shadow: 0 0 0 10px white;
+  z-index: 400;
+}
+
+.center-wheel {
+  position: absolute;
+  left: calc(((var(--mode-wheel-size) - var(--center-wheel-size)) / 2) * 1px);
+  top: calc(((var(--mode-wheel-size) - var(--center-wheel-size)) / 2) * 1px);
+  width: calc(var(--center-wheel-size) * 1px);
+  height: calc(var(--center-wheel-size) * 1px);
+  text-align: center;
+  font-size: 12px;
+  font-weight: bold;
+  background: white;
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px black;
+  z-index: 500;
+}
+
