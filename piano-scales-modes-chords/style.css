@@ -1,0 +1,136 @@
+:root {
+  /*--noteWidth:21;*/
+  --noteWidth:15;
+  --noteHeight:50;
+  /*--pianoKeyWidth:36;*/
+  --pianoKeyWidth:25.714285714285714;
+  /*--pianoKeyAccidentalWidth:23;*/
+  --pianoKeyAccidentalWidth:15;
+  /*--pianoKeyHeight:150;*/
+  --pianoKeyHeight:85;
+  /*--pianoKeyAccidentalHeight:100;*/
+  --pianoKeyAccidentalHeight:50;
+}
+
+* {
+  font-family: "Lucida Grande", sans-serif;
+  font-size: 14px;
+  /*margin: 0;*/
+  /*padding: 0;*/
+}
+
+input[type="radio"]{
+  margin: 0 2px 0 12px;
+}
+
+#chordNumber {
+  height: calc(var(--noteHeight) * 1px);
+}
+
+#notes {
+  height: calc(var(--noteHeight) * 1.25px);
+}
+
+#piano {
+  height: calc(var(--pianoKeyHeight) * 1.25px);
+}
+
+.note {
+  font-family: "Lucida Console", monospace;
+  font-weight: bold;
+  /*font-size: 10px;*/
+  font-size: 8px;
+  text-align: center;
+  position: absolute;
+  width: calc(var(--noteWidth) * 1px);
+  height: calc(var(--noteHeight) * 1px);
+  border: 1px solid black;
+  box-sizing: border-box;
+}
+
+
+.noteName {
+  font-family: "Lucida Console", monospace;
+  font-weight: bold;
+  /*font-size: 10px;*/
+  font-size: 8px;
+}
+
+.noteName sub {
+  font-family: "Lucida Console", monospace;
+  /*font-size: 10px;*/
+  font-size: 8px;
+}
+
+.pianoKey {
+  position: absolute;
+  width: calc(var(--pianoKeyWidth) * 1px);
+  height: calc(var(--pianoKeyHeight) * 1px);
+  border: 1px solid black;
+  box-sizing: border-box;
+  background: transparent;
+}
+
+.pianoKeyAccidental {
+  position: absolute;
+  width: calc(var(--pianoKeyAccidentalWidth) * 1px);
+  height: calc(var(--pianoKeyAccidentalHeight) * 1px);
+  border: 1px solid black;
+  box-sizing: border-box;
+  background: black;
+  z-index: 10;
+}
+
+#selectedNote {
+  float: left;
+}
+
+.selectedNote {
+  background: lightblue;
+}
+
+.playingNote {
+  background: lightgreen;
+}
+
+.disabled {
+  color: grey;
+}
+
+.selectTableNote:hover {
+  background-color: lightblue;
+}
+
+.rootNote {
+  float: left;
+  box-sizing: border-box;
+  /*display: flex;*/
+  /*margin-right: auto;*/
+  position: relative;
+  /*z-index: 100;*/
+  top: 1px;
+  left: 1px;
+  /* alignment: center; */
+  width: 10px;
+  height: 10px;
+}
+
+.scaleRootNote {
+  background: purple /* firebrick */;
+}
+
+.scaleRootNoteAlt {
+  border: 1px dashed purple; /* firebrick */
+}
+
+.modeRootNote {
+  background: fuchsia; /* lightcoral */ /* indianred */
+}
+
+.modeRootNoteAlt {
+  border: 1px dashed fuchsia; /* lightcoral */ /* indianred */
+}
+
+.diatonicNoteAlt {
+  border: 1px dashed lightblue;
+}
