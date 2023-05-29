@@ -1,0 +1,243 @@
+<html>
+<head>
+<style>
+
+:root {
+  --major-modes-rotation: 90;
+  --major-keys-rotation: 270;
+  --major-label-rotation: 0;
+  --harmonic-major-modes-rotation: 90;
+  --harmonic-major-keys-rotation: 270;
+  --harmonic-major-label-rotation: 0;
+  --melodic-minor-modes-rotation: 90;
+  --melodic-minor-keys-rotation: 270;
+  --melodic-minor-label-rotation: 0;
+  --harmonic-minor-modes-rotation: 330;
+  --harmonic-minor-keys-rotation: 270;
+  --harmonic-minor-label-rotation: 0;
+}
+
+* {
+  font-family: courier new,serif;
+  font-size: 15px;
+  font-weight: bold;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.major-modes {
+  position: absolute;
+  left: 0;
+  top: 0;
+  border-radius: 50%;
+  transform: rotate(calc(var(--major-modes-rotation) * 1deg));
+  touch-action: none;
+}
+
+.major-keys {
+  position: absolute;
+  left: 116px;
+  top: 116px;
+  border-radius: 50%;
+  transform: rotate(calc(var(--major-keys-rotation) * 1deg));
+  touch-action: none;
+}
+
+.major-label {
+  position: absolute;
+  left: 224px;
+  top: 224px;
+  border-radius: 50%;
+  transform: rotate(calc(var(--major-label-rotation) * 1deg));
+  touch-action: none;
+}
+
+.harmonic-major-modes {
+  position: absolute;
+  left: 620px;
+  top: 0;
+  border-radius: 50%;
+  transform: rotate(calc(var(--harmonic-major-modes-rotation) * 1deg));
+  touch-action: none;
+}
+
+.harmonic-major-keys {
+  position: absolute;
+  left: calc((620 + 111) * 1px);
+  top: 110px;
+  border-radius: 50%;
+  transform: rotate(calc(var(--harmonic-major-keys-rotation) * 1deg));
+  touch-action: none;
+}
+
+.harmonic-major-label {
+  position: absolute;
+  left: calc((620 + 219) * 1px);
+  top: 219px;
+  border-radius: 50%;
+  transform: rotate(calc(var(--harmonic-major-label-rotation) * 1deg));
+  touch-action: none;
+}
+
+.melodic-minor-modes {
+  position: absolute;
+  left: 0;
+  top: 620px;
+  border-radius: 50%;
+  transform: rotate(calc(var(--melodic-minor-modes-rotation) * 1deg));
+  touch-action: none;
+}
+
+.melodic-minor-keys {
+  position: absolute;
+  left: 119px;
+  top: calc((620 + 119) * 1px);
+  border-radius: 50%;
+  transform: rotate(calc(var(--melodic-minor-keys-rotation) * 1deg));
+  touch-action: none;
+}
+
+.melodic-minor-label {
+  position: absolute;
+  left: 228px;
+  top: calc((620 + 228) * 1px);
+  border-radius: 50%;
+  transform: rotate(calc(var(--melodic-minor-label-rotation) * 1deg));
+  touch-action: none;
+}
+
+.harmonic-minor-modes {
+  position: absolute;
+  left: 620px;
+  top: 620px;
+  border-radius: 50%;
+  transform: rotate(calc(var(--harmonic-minor-modes-rotation) * 1deg));
+  touch-action: none;
+}
+
+.harmonic-minor-keys {
+  position: absolute;
+  left: calc((620 + 111) * 1px);
+  top: calc((620 + 111) * 1px);
+  border-radius: 50%;
+  transform: rotate(calc(var(--harmonic-minor-keys-rotation) * 1deg));
+  touch-action: none;
+}
+
+.harmonic-minor-label {
+  position: absolute;
+  left: calc((620 + 219) * 1px);
+  top: calc((620 + 219) * 1px);
+  border-radius: 50%;
+  transform: rotate(calc(var(--harmonic-minor-label-rotation) * 1deg));
+  touch-action: none;
+}
+
+</style>
+
+<script>
+
+const radToDeg = (radians) => radians * (180 / Math.PI);
+
+const dragRotatableElem = (computedStyle, rotationVarName, elem, cssRuleStyle) => {
+  let rotation = Number(computedStyle.getPropertyValue(rotationVarName).trim());
+  let angle = rotation;
+  let isDragging = false;
+  let mouseDownAngle = angle;
+  const center = [0, 0];
+
+  const startMove = (e) => {
+    e.preventDefault();
+    e.target.setPointerCapture(e.pointerId);
+    const clientRect = elem.getBoundingClientRect();
+    center[0] = clientRect.left + (clientRect.width / 2);
+    center[1] = clientRect.top + (clientRect.height / 2);
+    isDragging = true;
+    const x = e.clientX - center[0];
+    const y = e.clientY - center[1];
+    mouseDownAngle = radToDeg(Math.atan2(y, x));
+  };
+
+  const move = (e) => {
+    if (isDragging) {
+      const x = e.clientX - center[0];
+      const y = e.clientY - center[1];
+      rotation = radToDeg(Math.atan2(y, x)) - mouseDownAngle;
+      cssRuleStyle.setProperty(rotationVarName, `${angle + rotation}`);
+    }
+  };
+
+  const endMove = (e) => {
+    e.target.releasePointerCapture(e.pointerId);
+    if (isDragging) {
+      angle += rotation;
+      isDragging = false;
+    }
+  };
+
+  elem.addEventListener('pointerdown', startMove);
+  elem.addEventListener('pointermove', move);
+  elem.addEventListener('pointerup', endMove);
+  elem.addEventListener('pointercancel', endMove);
+};
+
+window.addEventListener('load', () => {
+  const computedStyle = getComputedStyle(document.getElementsByTagName('body')[0]);
+  const styleSheet = document.styleSheets[0];
+
+  [
+      ['--major-modes-rotation', 'major-modes', 2],
+      ['--major-keys-rotation', 'major-keys', 3],
+      ['--major-label-rotation', 'major-label', 4],
+      ['--harmonic-major-modes-rotation', 'harmonic-major-modes', 5],
+      ['--harmonic-major-keys-rotation', 'harmonic-major-keys', 6],
+      ['--harmonic-major-label-rotation', 'harmonic-major-label', 7],
+      ['--melodic-minor-modes-rotation', 'melodic-minor-modes', 8],
+      ['--melodic-minor-keys-rotation', 'melodic-minor-keys', 9],
+      ['--melodic-minor-label-rotation', 'melodic-minor-label', 10],
+      ['--harmonic-minor-modes-rotation', 'harmonic-minor-modes', 11],
+      ['--harmonic-minor-keys-rotation', 'harmonic-minor-keys', 12],
+      ['--harmonic-minor-label-rotation', 'harmonic-minor-label', 13]
+  ].forEach((vals) => {
+    const rotationVarName = vals[0];
+    const img = document.getElementsByClassName(vals[1])[0];
+    const cssRuleStyle = styleSheet.cssRules[vals[2]].style;
+
+    dragRotatableElem(computedStyle, rotationVarName, img, cssRuleStyle);
+  });
+});
+
+</script>
+</head>
+<body>
+<div style="margin: 10px;">
+  <p>
+    Visit <span style="color: #8f2911;">NewJazz</span><br />
+    <a href="https://www.youtube.com/@NewJazz">Youtube channel</a><br />
+    and<br />
+    <a href="http://www.newjazz.dk/">website</a>
+  </p>
+</div>
+<div>
+  <img class="major-modes" src="major-modes.png" />
+  <img class="major-keys" src="keys.png" />
+  <img class="major-label" src="major-label.png" />
+</div>
+<div>
+  <img class="harmonic-major-modes" src="harmonic-major-modes.png" />
+  <img class="harmonic-major-keys" src="keys.png" />
+  <img class="harmonic-major-label" src="harmonic-major-label.png" />
+</div>
+<div>
+  <img class="melodic-minor-modes" src="melodic-minor-modes.png" />
+  <img class="melodic-minor-keys" src="keys.png" />
+  <img class="melodic-minor-label" src="melodic-minor-label.png" />
+</div>
+<div>
+  <img class="harmonic-minor-modes" src="harmonic-minor-modes.png" />
+  <img class="harmonic-minor-keys" src="keys.png" />
+  <img class="harmonic-minor-label" src="harmonic-minor-label.png" />
+</div>
+</body>
+</html>
