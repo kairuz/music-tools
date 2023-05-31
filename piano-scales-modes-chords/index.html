@@ -2,11 +2,102 @@
 <head>
 <link rel="stylesheet" href="style.css" />
 <script type="module">
-
-import {Piano} from "./music.js";
+import Piano from "./piano.js";
 
 window.addEventListener('load', () => {
-  Piano().init();
+  const piano = Piano();
+
+  document.body.appendChild(piano.playChordButton);
+  document.body.appendChild(piano.playArpeggioButton);
+
+  const scaleLabel = document.createElement('label');
+  scaleLabel.textContent = 'Scale';
+  scaleLabel.setAttribute('for', 'scale');
+  document.body.appendChild(document.createElement('br'));
+  document.body.appendChild(scaleLabel);
+  document.body.appendChild(piano.selectedScaleDiv);
+  document.body.appendChild(document.createElement('br'));
+
+  const lockToKeyLabel = document.createElement('label');
+  lockToKeyLabel.textContent = 'Lock To Key';
+  lockToKeyLabel.setAttribute('for', 'lockToKey');
+  document.body.appendChild(document.createElement('br'));
+  document.body.appendChild(piano.lockToKeyCheckbox);
+  document.body.appendChild(lockToKeyLabel);
+  document.body.appendChild(document.createElement('br'));
+
+  const modeLabel = document.createElement('label');
+  modeLabel.textContent = 'Mode / Chord';
+  modeLabel.setAttribute('for', 'mode');
+  document.body.appendChild(document.createElement('br'));
+  document.body.appendChild(modeLabel);
+  document.body.appendChild(piano.selectedModeDiv);
+  document.body.appendChild(document.createElement('br'));
+
+  const selectionTypeLabel = document.createElement('label');
+  selectionTypeLabel.textContent = 'Type';
+  selectionTypeLabel.setAttribute('for', 'selectionType');
+  document.body.appendChild(document.createElement('br'));
+  document.body.appendChild(selectionTypeLabel);
+  document.body.appendChild(piano.selectedSelectionTypeDiv);
+  document.body.appendChild(document.createElement('br'));
+
+  const typeScaleFieldset = document.createElement('fieldset');
+  document.body.appendChild(typeScaleFieldset);
+
+  const typeScaleLegend = document.createElement('legend');
+  typeScaleLegend.textContent = 'Scale';
+  typeScaleFieldset.appendChild(typeScaleLegend);
+
+  const includeOctaveLabel = document.createElement('label');
+  includeOctaveLabel.textContent = 'Include Octave';
+  includeOctaveLabel.setAttribute('for', 'includeOctave');
+  typeScaleFieldset.appendChild(document.createElement('br'));
+  typeScaleFieldset.appendChild(piano.includeOctaveCheckbox);
+  typeScaleFieldset.appendChild(includeOctaveLabel);
+  typeScaleFieldset.appendChild(document.createElement('br'));
+
+  document.body.appendChild(document.createElement('br'));
+
+  const typeChordFieldset = document.createElement('fieldset');
+  document.body.appendChild(typeChordFieldset);
+  typeChordFieldset.setAttribute('disabled', 'disabled');
+
+  const typeChordLegend = document.createElement('legend');
+  typeChordLegend.textContent = 'Chord';
+  typeChordLegend.classList.add('disabled');
+  typeChordFieldset.appendChild(typeChordLegend);
+
+  piano.selectionTypeRadios[0].addEventListener('click', () => {
+    typeScaleFieldset.removeAttribute('disabled');
+    typeScaleLegend.classList.remove('disabled');
+    typeChordFieldset.setAttribute('disabled', 'disabled');
+    typeChordLegend.classList.add('disabled');
+  });
+  piano.selectionTypeRadios[1].addEventListener('click', () => {
+    typeChordFieldset.removeAttribute('disabled');
+    typeChordLegend.classList.remove('disabled');
+    typeScaleFieldset.setAttribute('disabled', 'disabled');
+    typeScaleLegend.classList.add('disabled');
+  });
+
+  const chordTypeLabel = document.createElement('label');
+  chordTypeLabel.textContent = 'Type';
+  chordTypeLabel.setAttribute('for', 'chordType');
+  typeChordFieldset.appendChild(document.createElement('br'));
+  typeChordFieldset.appendChild(chordTypeLabel);
+  typeChordFieldset.appendChild(piano.selectedChordTypeDiv);
+  typeChordFieldset.appendChild(document.createElement('br'));
+
+  document.body.appendChild(document.createElement('br'));
+  document.body.appendChild(document.createElement('br'));
+  document.body.appendChild(piano.selectedNoteDiv);
+  document.body.appendChild(document.createElement('br'));
+  document.body.appendChild(document.createElement('br'));
+  document.body.appendChild(document.createElement('br'));
+  document.body.appendChild(piano.indicesDiv);
+  document.body.appendChild(piano.notesDiv);
+  document.body.appendChild(piano.pianoDiv);
 });
 
 </script>

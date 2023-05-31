@@ -1,47 +1,5 @@
-const Scale = (_name, _steps, _intervals, _flags) => {
-  const name = _name;
-  const steps = _steps;
-  const intervals = _intervals;
-  const flags = _flags;
+import Scale from "./scale.js";
 
-  return {
-    buildModeIntervals: (mode) => {
-      const modeIndex = mode - 1;
-      return intervals.slice(modeIndex, intervals.length).concat(intervals.slice(0, modeIndex));
-    },
-    getName: () => name,
-    getSteps: () => steps,
-    getIntervals: () => intervals,
-    getFlags: () => flags,
-    getNumberOfDiatonicNotes: () => flags.filter((flag) => flag === true).length,
-    getNumberOfHalfNotes: () => flags.length,
-  };
-};
-
-Scale.flagsFromIntervals = (intervals) => {
-  return intervals.reduce((acc, currElem) => {
-    acc.push(true);
-    for (let j = 1; j < currElem; j++) {
-      acc.push(false);
-    }
-    return acc;
-  }, []);
-};
-
-Scale.stepsFromFlags = (flags) => {
-  return flags.reduce((acc, elem, i) => {
-    if (elem === true) {
-      acc.push(i);
-    }
-    return acc;
-  }, []);
-};
-
-Scale.fromIntervals = (name, intervals) => {
-  const flags = Scale.flagsFromIntervals(intervals);
-  const steps = Scale.stepsFromFlags(flags);
-  return Scale(name, steps, intervals, flags);
-};
 
 const Piano = () => {
 
@@ -290,7 +248,7 @@ const Piano = () => {
         else if (type.getName() === 'chord') {
           const chordSteps = [];
           const wrappedModeSteps =
-            modeSteps.concat(modeSteps.map((modeStep) => modeStep + scale.getNumberOfHalfNotes()));
+              modeSteps.concat(modeSteps.map((modeStep) => modeStep + scale.getNumberOfHalfNotes()));
           let ii = 0;
           for (let i = 0; i < chordType.getNoOfNotes(); i++) {
             chordSteps.push(wrappedModeSteps[ii]);
@@ -322,7 +280,6 @@ const Piano = () => {
       getNoteIndex: () => noteIndex
     }
   })();
-
 
   const selectedScaleDiv = document.createElement('div');
   selectedScaleDiv.setAttribute('id', 'scale');
@@ -445,7 +402,6 @@ const Piano = () => {
     }
   };
 
-
   const markModes = (selectedNoteDivIndex) => {
     notesAndPianoKeys.clearModes();
     const scaleIntervals = selection.getScale().getIntervals();
@@ -553,7 +509,6 @@ const Piano = () => {
     selectedScaleRadioLabel.setAttribute('for', selectedScaleRadioId);
     selectedScaleDiv.appendChild(selectedScaleRadio);
     selectedScaleDiv.appendChild(selectedScaleRadioLabel);
-    // selectedScaleDiv.appendChild(document.createElement('br'));
 
     selectedScaleRadio.addEventListener('click', () => {
 
@@ -706,20 +661,20 @@ const Piano = () => {
       pianoDiv.appendChild(pianoKeyDiv);
 
       const noteLeft = firstCAdjust + (
-        isFirstOctave ?
+          isFirstOctave ?
           ((i - startingNoteIndex) * noteDivWidth) :
-          ((noOfNotes - startingNoteIndex) * noteDivWidth) +
-            ((j - 1) * noOfNotes * noteDivWidth) + (i * noteDivWidth)
+                       ((noOfNotes - startingNoteIndex) * noteDivWidth) +
+                       ((j - 1) * noOfNotes * noteDivWidth) + (i * noteDivWidth)
       );
 
       noteDiv.setAttribute('style', `left: ${noteLeft}px`);
       indexDiv.setAttribute('style', `font-size: 8px; text-align: center; position: absolute; left: ${noteLeft}px;`);
       const diatonicKeyLeft =
-        isFirstOctave ?
+          isFirstOctave ?
           diatonicCount * pianoKeyDivWidth :
           (noOfDiatonicNotesFromStartingNoteIndex * pianoKeyDivWidth) +
-            ((j - 1) * noOfDiatonicNotes * pianoKeyDivWidth) +
-            (diatonicCount * pianoKeyDivWidth);
+          ((j - 1) * noOfDiatonicNotes * pianoKeyDivWidth) +
+          (diatonicCount * pianoKeyDivWidth);
 
       if (isAccidental === false) {
         pianoKeyDiv.setAttribute('class', 'pianoKey');
@@ -734,7 +689,7 @@ const Piano = () => {
       }
 
       const noteClickIndex =
-        isFirstOctave ?
+          isFirstOctave ?
           i - startingNoteIndex :
           (noOfNotes - startingNoteIndex) + ((j - 1) * noOfNotes) + i;
 
@@ -771,8 +726,8 @@ const Piano = () => {
       pianoKeyDiv.addEventListener('contextmenu', rightClick);
 
       noteSpan.innerHTML = noteName + ((isFirstOctave && i === startI) ||
-                                   i === noteNamesIndexOfA || i === noteNames.indexOf('C')  ?
-                                   `<sub>${noteOctave}</sub>` : '');
+                                       i === noteNamesIndexOfA || i === noteNames.indexOf('C')  ?
+                                       `<sub>${noteOctave}</sub>` : '');
     }
   }
 
@@ -825,107 +780,22 @@ const Piano = () => {
     }
   });
 
-
   return {
-    init: () => {
-      document.getElementsByTagName('body')[0].appendChild(playChordButton);
-      document.getElementsByTagName('body')[0].appendChild(playArpeggioButton);
-
-      const scaleLabel = document.createElement('label');
-      scaleLabel.textContent = 'Scale';
-      scaleLabel.setAttribute('for', 'scale');
-      body.appendChild(document.createElement('br'));
-      body.appendChild(scaleLabel);
-      body.appendChild(selectedScaleDiv);
-      body.appendChild(document.createElement('br'));
-
-      const lockToKeyLabel = document.createElement('label');
-      lockToKeyLabel.textContent = 'Lock To Key';
-      lockToKeyLabel.setAttribute('for', 'lockToKey');
-      body.appendChild(document.createElement('br'));
-      body.appendChild(lockToKeyCheckbox);
-      body.appendChild(lockToKeyLabel);
-      body.appendChild(document.createElement('br'));
-
-      const modeLabel = document.createElement('label');
-      modeLabel.textContent = 'Mode / Chord';
-      modeLabel.setAttribute('for', 'mode');
-      body.appendChild(document.createElement('br'));
-      body.appendChild(modeLabel);
-      body.appendChild(selectedModeDiv);
-      body.appendChild(document.createElement('br'));
-
-      const selectionTypeLabel = document.createElement('label');
-      selectionTypeLabel.textContent = 'Type';
-      selectionTypeLabel.setAttribute('for', 'selectionType');
-      body.appendChild(document.createElement('br'));
-      body.appendChild(selectionTypeLabel);
-      body.appendChild(selectedSelectionTypeDiv);
-      body.appendChild(document.createElement('br'));
-
-      const typeScaleFieldset = document.createElement('fieldset');
-      body.appendChild(typeScaleFieldset);
-
-      const typeScaleLegend = document.createElement('legend');
-      typeScaleLegend.textContent = 'Scale';
-      typeScaleFieldset.appendChild(typeScaleLegend);
-
-      const includeOctaveLabel = document.createElement('label');
-      includeOctaveLabel.textContent = 'Include Octave';
-      includeOctaveLabel.setAttribute('for', 'includeOctave');
-      typeScaleFieldset.appendChild(document.createElement('br'));
-      typeScaleFieldset.appendChild(includeOctaveCheckbox);
-      typeScaleFieldset.appendChild(includeOctaveLabel);
-      typeScaleFieldset.appendChild(document.createElement('br'));
-
-      body.appendChild(document.createElement('br'));
-
-      const typeChordFieldset = document.createElement('fieldset');
-      body.appendChild(typeChordFieldset);
-      typeChordFieldset.setAttribute('disabled', 'disabled');
-
-      const typeChordLegend = document.createElement('legend');
-      typeChordLegend.textContent = 'Chord';
-      typeChordLegend.classList.add('disabled');
-      typeChordFieldset.appendChild(typeChordLegend);
-
-      selectionTypeRadios[0].addEventListener('click', () => {
-        typeScaleFieldset.removeAttribute('disabled');
-        typeScaleLegend.classList.remove('disabled');
-        typeChordFieldset.setAttribute('disabled', 'disabled');
-        typeChordLegend.classList.add('disabled');
-      });
-      selectionTypeRadios[1].addEventListener('click', () => {
-        typeChordFieldset.removeAttribute('disabled');
-        typeChordLegend.classList.remove('disabled');
-        typeScaleFieldset.setAttribute('disabled', 'disabled');
-        typeScaleLegend.classList.add('disabled');
-      });
-
-      const chordTypeLabel = document.createElement('label');
-      chordTypeLabel.textContent = 'Type';
-      chordTypeLabel.setAttribute('for', 'chordType');
-      typeChordFieldset.appendChild(document.createElement('br'));
-      typeChordFieldset.appendChild(chordTypeLabel);
-      typeChordFieldset.appendChild(selectedChordTypeDiv);
-      typeChordFieldset.appendChild(document.createElement('br'));
-
-      body.appendChild(document.createElement('br'));
-      body.appendChild(document.createElement('br'));
-      body.appendChild(selectedNoteDiv);
-      body.appendChild(document.createElement('br'));
-      body.appendChild(document.createElement('br'));
-      body.appendChild(document.createElement('br'));
-      body.appendChild(indicesDiv);
-      body.appendChild(notesDiv);
-      body.appendChild(pianoDiv);
-
-    },
-
-    getNotesAndPianoKeys: () => notesAndPianoKeys
-
+    get playChordButton(){return playChordButton;},
+    get playArpeggioButton(){return playArpeggioButton;},
+    get selectedScaleDiv(){return selectedScaleDiv;},
+    get selectedModeDiv(){return selectedModeDiv;},
+    get lockToKeyCheckbox(){return lockToKeyCheckbox;},
+    get selectedSelectionTypeDiv(){return selectedSelectionTypeDiv;},
+    get selectionTypeRadios(){return selectionTypeRadios;},
+    get includeOctaveCheckbox(){return includeOctaveCheckbox;},
+    get selectedChordTypeDiv(){return selectedChordTypeDiv;},
+    get selectedNoteDiv(){return selectedNoteDiv;},
+    get indicesDiv(){return indicesDiv;},
+    get notesDiv(){return notesDiv;},
+    get pianoDiv(){return pianoDiv;}
   };
 };
 
 
-export {Scale, Piano};
+export default Piano;
