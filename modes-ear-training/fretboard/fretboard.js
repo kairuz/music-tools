@@ -1,5 +1,5 @@
 import FretboardLayoutManager from './fretboard-layout-manager.js';
-import {NOTE_NAME_INDEX} from "../music.js";
+import {indexForKeyName} from "https://kairuz.github.io/modality/glossary.js"
 
 
 // E4 B3 G3 D3 A2 E2
@@ -402,16 +402,17 @@ const Fretboard = (
     }
   }
 
-  let selectedScale = null;
+  let selectedModeFlagsAndName = null;
 
-  const applyScale = (scale, noteDivCallback) => {
-    scaleNameDiv.innerHTML = `${scale.getName()}`;
+  const applyMode = (modeFlags, name, noteDivCallback) => {
+    // scaleNameDiv.innerHTML = `${scale.getName()}`;
+    scaleNameDiv.innerHTML = `${name}`;
     guitarstrings.forEach(([_, guitarstringNote], guitarstringIndex) => {
-      const guitarstringNoteIndex = NOTE_NAME_INDEX[guitarstringNote];
+      const guitarstringNoteIndex = indexForKeyName(guitarstringNote);
       let degree = (() => {
         let c = 0;
         for (let i = 0; i < guitarstringNoteIndex; i++) {
-          if (scale.getFlags()[i]) {
+          if (modeFlags[i]) {
             c++;
           }
         }
@@ -419,17 +420,18 @@ const Fretboard = (
       })();
 
       for (let i = 0; i < noOfFrets; i++) {
-        if ((scale.getFlags()[(guitarstringNoteIndex + i) % scale.getFlags().length]) === true) {
-          degree = (degree % scale.getNoOfNotes()) + 1;
+        if ((modeFlags[(guitarstringNoteIndex + i) % modeFlags.length]) === 1) {
+          degree = (degree % 7) + 1; // todo 7
           noteDivCallback(degree, i, guitarstringIndex);
         }
       }
     });
   };
 
-  const selectScale = (scale) => {
-    if (selectedScale !== null) {
-      applyScale(selectedScale, (degree, fret, guitarstringIndex) => {
+  const selectMode = (modeFlags, name) => {
+    if (selectedModeFlagsAndName !== null) {
+      const [selectedModeFlags, selectedName] = selectedModeFlagsAndName;
+      applyMode(selectedModeFlags, selectedName, (degree, fret, guitarstringIndex) => {
         if (fret === 0) {
           noteDivs[guitarstringIndex][fret].style['border'] = null;
         }
@@ -440,10 +442,10 @@ const Fretboard = (
       });
     }
 
-    selectedScale = scale;
+    selectedModeFlagsAndName = [modeFlags, name];
 
     {
-      applyScale(selectedScale, (degree, fret, guitarstringIndex) => {
+      applyMode(modeFlags, name, (degree, fret, guitarstringIndex) => {
         if (fret === 0) {
           noteDivs[guitarstringIndex][fret].style['border'] = `${muteNoteDivSize}px solid black`;
         }
@@ -458,7 +460,7 @@ const Fretboard = (
   loadLayout();
 
   return {
-    selectScale,
+    selectMode,
     setLeftHanded,
     setRightHanded,
     setHorizontal,

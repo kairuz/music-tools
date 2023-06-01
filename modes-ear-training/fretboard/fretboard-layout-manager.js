@@ -1,4 +1,4 @@
-import {NOTES_PER_OCTAVE, NOTE_NAMES} from '../music.js';
+import {indexForKeyName} from "https://kairuz.github.io/modality/glossary.js";
 
 
 //               frets:          strings:
@@ -8,6 +8,7 @@ import {NOTES_PER_OCTAVE, NOTE_NAMES} from '../music.js';
 // horiz-left:   top to bottom,  right to left
 
 const NO_OF_NOTES = 108;
+const SEMITONES = 12;
 
 const FretboardLayoutManager = (
     fretBarDivs,
@@ -79,7 +80,7 @@ const FretboardLayoutManager = (
     });
 
     guitarstringDivs.forEach((guitarstringDiv, i) => {
-      const guitarstringDivWidth = ((NO_OF_NOTES / 1.5) - ((guitarstrings[i][0] * NOTES_PER_OCTAVE) + NOTE_NAMES.indexOf(guitarstrings[i][1]))) * 0.1;
+      const guitarstringDivWidth = ((NO_OF_NOTES / 1.5) - ((guitarstrings[i][0] * SEMITONES) + indexForKeyName(guitarstrings[i][1]))) * 0.1;
       const guitarstringDivCenter = ((guitarstringSpace / 2) - (guitarstringDivWidth / 2));
       guitarstringDiv.style['left'] = null;
       guitarstringDiv.style['right'] = `${guitarstringDivCenter + (i * guitarstringSpace)}px`;
@@ -161,7 +162,7 @@ const FretboardLayoutManager = (
     });
 
     guitarstringDivs.forEach((guitarstringDiv, i) => {
-      const guitarstringDivWidth = ((NO_OF_NOTES / 1.5) - ((guitarstrings[i][0] * NOTES_PER_OCTAVE) + NOTE_NAMES.indexOf(guitarstrings[i][1]))) * 0.1;
+      const guitarstringDivWidth = ((NO_OF_NOTES / 1.5) - ((guitarstrings[i][0] * SEMITONES) + indexForKeyName(guitarstrings[i][1]))) * 0.1;
       const guitarstringDivCenter = ((guitarstringSpace / 2) - (guitarstringDivWidth / 2));
       guitarstringDiv.style['right'] = null;
       guitarstringDiv.style['left'] = `${guitarstringDivCenter + (i * guitarstringSpace)}px`;
@@ -243,7 +244,7 @@ const FretboardLayoutManager = (
     });
 
     guitarstringDivs.forEach((guitarstringDiv, i) => {
-      const guitarstringDivWidth = ((NO_OF_NOTES / 1.5) - ((guitarstrings[i][0] * NOTES_PER_OCTAVE) + NOTE_NAMES.indexOf(guitarstrings[i][1]))) * 0.1;
+      const guitarstringDivWidth = ((NO_OF_NOTES / 1.5) - ((guitarstrings[i][0] * SEMITONES) + indexForKeyName(guitarstrings[i][1]))) * 0.1;
       const guitarstringDivCenter = ((guitarstringSpace / 2) - (guitarstringDivWidth / 2));
       guitarstringDiv.style['right'] = null;
       guitarstringDiv.style['top'] = `${guitarstringDivCenter + (i * guitarstringSpace)}px`;
@@ -325,7 +326,7 @@ const FretboardLayoutManager = (
     });
 
     guitarstringDivs.forEach((guitarstringDiv, i) => {
-      const guitarstringDivWidth = ((NO_OF_NOTES / 1.5) - ((guitarstrings[i][0] * NOTES_PER_OCTAVE) + NOTE_NAMES.indexOf(guitarstrings[i][1]))) * 0.1;
+      const guitarstringDivWidth = ((NO_OF_NOTES / 1.5) - ((guitarstrings[i][0] * SEMITONES) + indexForKeyName(guitarstrings[i][1]))) * 0.1;
       const guitarstringDivCenter = ((guitarstringSpace / 2) - (guitarstringDivWidth / 2));
       guitarstringDiv.style['left'] = null;
       guitarstringDiv.style['top'] = `${guitarstringDivCenter + (i * guitarstringSpace)}px`;
