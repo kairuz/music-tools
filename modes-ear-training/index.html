@@ -32,27 +32,30 @@
 
     .scale {
       margin: 10px;
-      width: 220px;
+      width: 280px;
       display: inline-block;
     }
 
     .scale-name {
-      width: 220px;
+      width: 200px;
+      height: 40px;
     }
 
     .modes {
-      width: 280px;
+      width: 260px;
       margin-top: 10px;
     }
 
     .mode-answer-button {
       width: 200px;
+      height: 40px;
       text-align: left;
       margin: 4px;
+      overflow: hidden;
     }
 
     .mode-play-button {
-      display: inline-block;
+
     }
 
     .visible {
@@ -68,8 +71,10 @@
 <script type="module">
 
 import {FretboardBuilder} from "./fretboard/fretboard.js";
-import {Scale, scales, scaleNames, scaleModeNames} from "./music.js";
+import ScaleUi from "./scale-ui.js";
 import WebAudioFontPlayer from "https://kairuz.github.io/webaudiofont/npm/dist/player.js";
+import * as domain from "https://kairuz.github.io/modality/domain.js";
+import * as glossary from "https://kairuz.github.io/modality/glossary.js";
 
 const audioContext = new AudioContext();
 
@@ -86,7 +91,6 @@ window.addEventListener('load', () => {
       return new Promise((resolve) => {
         webAudioFontPlayer.loader.startLoad(audioContext, webAudioFontPresetPath, webAudioFontPresetVarName);
         webAudioFontPlayer.loader.waitLoad(() => {
-          console.log('WAITED LOAD - RESOLVING');
           resolve();
         });
       });
@@ -162,11 +166,11 @@ window.addEventListener('load', () => {
       scaleIndexIncludes.forEach((scaleIndexInclude) => scaleIndexIncludesForRound.add(scaleIndexInclude));
 
       const scaleIndexIncludesArr = Array.from(scaleIndexIncludes.values());
-      const scaleIndexExcludesArr = Array.from(scales.keys()).filter((i) => !scaleIndexIncludes.has(i));
+      const scaleIndexExcludesArr = Array.from(domain.SCALES.keys()).filter((i) => !scaleIndexIncludes.has(i));
 
       expectedScaleNameIndex = scaleIndexIncludesArr[Math.trunc(Math.random() * scaleIndexIncludesArr.length)];
-      expectedScaleName = scaleNames[expectedScaleNameIndex];
-      const expectedScaleModeNames = scaleModeNames[expectedScaleNameIndex];
+      expectedScaleName = glossary.SCALE_NAMES[expectedScaleNameIndex];
+      const expectedScaleModeNames = glossary.SCALES_MODES_NAMES[expectedScaleNameIndex];
       expectedModeNameIndex = Math.trunc(Math.random() * expectedScaleModeNames.length);
       expectedModeName = expectedScaleModeNames[expectedModeNameIndex];
       console.log(`(CHEAT...) expected ${expectedScaleName} - ${expectedModeName}`);
@@ -180,10 +184,12 @@ window.addEventListener('load', () => {
           .map((scaleIndexExclude) => scaleUis[scaleIndexExclude])
           .forEach((scaleUi) => scaleUi.getModeAnswerButtons().forEach((modeButton) => modeButton.setAttribute('disabled' , 'disabled')));
 
-      const expectedScale = scales[expectedScaleNameIndex];
+      const expectedScale = domain.SCALES[expectedScaleNameIndex];
       fretboardDiv.classList.remove('visible');
       fretboardDiv.classList.add('hidden');
-      fretboard.selectScale(Scale(`C - ${expectedScaleName} - ${expectedModeName}`, expectedScale.toModeFlags(expectedModeNameIndex + 1)));
+      const name = `C - ${expectedScaleName} - ${expectedModeName}`;
+      const modeFlags = expectedScale.getModeFlags(expectedModeNameIndex);
+      fretboard.selectMode(modeFlags, name);
 
       stop();
       playExpectedScaleMode();
@@ -204,12 +210,12 @@ window.addEventListener('load', () => {
 
   const play = (scaleNameIndex, modeNameIndex) => {
     const playOctave = (delayFactor, playOctaves, sustainFactor = delayFactor * 1.4, octave = 4) => {
-      const scale = scales[scaleNameIndex];
-      const flags = scale.toModeFlags(modeNameIndex + 1);
+      const scale = domain.SCALES[scaleNameIndex];
+      const flags = scale.getModeFlags(modeNameIndex);
 
       for (let i = 0; i <= flags.length * playOctaves; i++) {
         const flag = flags[i % flags.length];
-        if (flag === true) {
+        if (flag === 1) {
 
           const node = webAudioFontPlayer.queueWaveTable(
               audioContext, audioContext.destination, window[webAudioFontPresetVarName],
@@ -226,7 +232,7 @@ window.addEventListener('load', () => {
 
       for (let i = (flags.length * playOctaves) - 1; i >= 0; i--) {
         const flag = flags[i % flags.length];
-        if (flag === true) {
+        if (flag === 1) {
 
           const node = webAudioFontPlayer.queueWaveTable(
               audioContext, audioContext.destination, window[webAudioFontPresetVarName],
@@ -322,86 +328,19 @@ window.addEventListener('load', () => {
   const scaleIndexIncludes = new Set();
   const scaleIndexIncludesForRound = new Set();
 
-  const ScaleUi = (scaleIndex, scale, scaleName, modeNames, include) => {
-    const div = document.createElement('div');
-    div.classList.add('scale');
-
-    const scaleHeaderDiv = document.createElement('div');
-    scaleHeaderDiv.classList.add('scale-name');
-    scaleHeaderDiv.textContent = scaleName;
-
-    const includeCheckbox = document.createElement('input');
-    includeCheckbox.setAttribute('type', 'checkbox');
-
-    scaleHeaderDiv.appendChild(includeCheckbox);
-    if (include === true) {
-      includeCheckbox.checked = include;
-      scaleIndexIncludes.add(scaleIndex);
-    }
-    includeCheckbox.addEventListener('click', () => {
-      if (includeCheckbox.checked) {
-        scaleIndexIncludes.add(scaleIndex);
-      }
-      else {
-        scaleIndexIncludes.delete(scaleIndex);
-      }
-    });
-
-    div.appendChild(scaleHeaderDiv);
-
-    const modesDiv = document.createElement('div');
-    modesDiv.classList.add('modes');
-    div.appendChild(modesDiv);
-
-    const modeAnswerButtons = Array.from(Array(scale.getNoOfNotes()).keys()).map((i) => {
-      const modeName = modeNames[i];
-      const modeDiv = document.createElement('div');
-      modeDiv.classList.add('mode');
-      modesDiv.appendChild(modeDiv);
-      const modeAnswerButton = document.createElement('button');
-      modeAnswerButton.classList.add('mode-answer-button');
-      modeAnswerButton.textContent = modeName;
-      modeDiv.appendChild(modeAnswerButton);
-      modeAnswerButton.addEventListener('click', () => {
-        if (scaleIndexIncludesForRound.has(scaleIndex)) {
-          if (expectedScaleName !== null && expectedModeName !== null) {
-            answer(scaleName, modeName);
-          }
-        }
-      });
-      const modePlayButton = document.createElement('button');
-      modePlayButton.classList.add('mode-play-button');
-
-      modePlayButton.textContent = String.fromCodePoint(128266);
-      modeDiv.appendChild(modePlayButton);
-      modePlayButton.addEventListener('click', () => {
-        loadAudio().then(() => {
-          stop();
-          play(scaleIndex, i);
-        });
-      });
-      modeAnswerButton.setAttribute('disabled', 'disabled');
-
-      allModeAnswerButtons.push(modeAnswerButton);
-      allModePlayButtons.push(modePlayButton);
-
-      return modeAnswerButton;
-    });
-
-    return {
-      getDiv: () => div,
-      getModeAnswerButtons: () => modeAnswerButtons
-    }
-  };
-
   const allModeAnswerButtons = [];
   const allModePlayButtons = [];
 
-  const scaleUis = Array
-      .from(new Array(scales.length).keys())
-      .map((i) => ScaleUi(i, scales[i], scaleNames[i], scaleModeNames[i], i === 0));
+  const scaleUis = glossary.SCALES_NAMES_PATTERNS_MODES_NAMES.map(([scaleName, scalePattern, modeNames], scaleIndex) => {
+    const scale = domain.SCALES[scaleIndex];
+    return ScaleUi(scaleIndex, scale, scaleName, modeNames, scaleName === glossary.SCALE_NAME_MAJOR,
+                   allModeAnswerButtons, allModePlayButtons, scaleIndexIncludes, scaleIndexIncludesForRound,
+                   () => expectedScaleName, () => expectedModeName, answer, loadAudio, play, stop);
+  });
 
   scaleUis.forEach((scaleUi) => appDiv.appendChild(scaleUi.getDiv()));
+
+  appDiv.appendChild(document.createElement('br'));
 
   const fretboardDiv = document.createElement('div');
   fretboardDiv.classList.add('hidden');
