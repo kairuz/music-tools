@@ -14,17 +14,18 @@
     top: 20px;
   }
 
-  #harmonic-minor-scale-modes-wheel {
+  #melodic-minor-scale-modes-wheel {
     position: absolute;
     left: 20px;
     top: 440px;
   }
 
-  #melodic-minor-scale-modes-wheel {
+  #harmonic-minor-scale-modes-wheel {
     position: absolute;
     left: 440px;
     top: 440px;
   }
+
 </style>
 <script type="module">
   import {
@@ -44,13 +45,14 @@
     const harmonicMajorScaleModesWheel = ModesWheel('<br />harmonic<br />major', harmonicMajorScaleFlags, harmonicMajorScaleModes, colors, harmonicMajorScaleModesWheelDiv);
     harmonicMajorScaleModesWheelDiv.appendChild(harmonicMajorScaleModesWheel.getParentDiv());
 
+    const melodicMinorScaleModesWheelDiv = document.getElementById('melodic-minor-scale-modes-wheel');
+    const melodicMinorScaleModesWheel = ModesWheel('<br />melodic</br />minor', melodicMinorScaleFlags, melodicMinorScaleModes, colors, melodicMinorScaleModesWheelDiv);
+    melodicMinorScaleModesWheelDiv.appendChild(melodicMinorScaleModesWheel.getParentDiv());
+
     const harmonicMinorScaleModesWheelDiv = document.getElementById('harmonic-minor-scale-modes-wheel');
     const harmonicMinorScaleModesWheel = ModesWheel('<br />harmonic<br />minor', harmonicMinorScaleFlags, harmonicMinorScaleModes, colors, harmonicMinorScaleModesWheelDiv);
     harmonicMinorScaleModesWheelDiv.appendChild(harmonicMinorScaleModesWheel.getParentDiv());
 
-    const melodicMinorScaleModesWheelDiv = document.getElementById('melodic-minor-scale-modes-wheel');
-    const melodicMinorScaleModesWheel = ModesWheel('<br />melodic</br />minor', melodicMinorScaleFlags, melodicMinorScaleModes, colors, melodicMinorScaleModesWheelDiv);
-    melodicMinorScaleModesWheelDiv.appendChild(melodicMinorScaleModesWheel.getParentDiv());
   });
 
 </script>
@@ -59,8 +61,8 @@
 <a style="margin: 10px; float: right;" href="https://www.github.com/kairuz/music-tools">GitHub</a>
 <div id="major-scale-modes-wheel"></div>
 <div id="harmonic-major-scale-modes-wheel"></div>
-<div id="harmonic-minor-scale-modes-wheel"></div>
 <div id="melodic-minor-scale-modes-wheel"></div>
+<div id="harmonic-minor-scale-modes-wheel"></div>
 </body>
 
 </html>

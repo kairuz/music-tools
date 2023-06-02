@@ -107,14 +107,7 @@ const ModesWheel = (name, scaleFlags, modes, colors, modesWheelDiv) => {
   modesWheelParentDiv.appendChild(centerWheelDiv);
 
   return {
-    getParentDiv: () => modesWheelParentDiv,
-    getModeWheelDiv: () => modeWheelDiv,
-    orientateModeWheelDiv: (angleRotation) => {
-      // modeWheelDivStyle.setProperty('transform', `rotate(${angleRotation}deg)`);
-      // dragRotatableElemKeyWheelDiv.setAngleRotation(angleRotation);
-    },
-    getKeyWheelDiv: () => keyWheelDiv,
-    orientateKeyWheelDiv: (angleRotation) => keyWheelDivStyle.setProperty('transform', `rotate(${angleRotation}deg)`),
+    getParentDiv: () => modesWheelParentDiv
   };
 
 };
