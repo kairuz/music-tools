@@ -20,6 +20,7 @@
 .modes-wheel-parent {
   position: absolute;
   width: calc(var(--key-wheel-size) * 1px);
+  touch-action: none;
 }
 
 .mode-wheel {
@@ -29,6 +30,7 @@
   border-radius: 50%;
   box-shadow: 0 0 0 2px black;
   background: aliceblue;
+  touch-action: none;
 }
 
 .mode {
@@ -41,6 +43,7 @@
   font-weight: bold;
   box-shadow: 0 0 0 2px black;
   transform-origin: bottom center;
+  touch-action: none;
 }
 
 .key-wheel {
@@ -51,6 +54,7 @@
   width: calc(var(--key-wheel-size) * 1px);
   height: calc(var(--key-wheel-size) * 1px);
   border-radius: 50%;
+  touch-action: none;
 }
 
 .key {
@@ -63,13 +67,16 @@
   border-right: calc((var(--key-width) / 2) * 1px) solid transparent;
   background: transparent;
   transform-origin: bottom center;
+  touch-action: none;
 }
 
 .key-diatonic {
   border-top: calc((var(--key-wheel-size) / 2) * 1px) solid white;
+  touch-action: none;
 }
 .key-accidental {
   border-top: calc((var(--key-wheel-size) / 2) * 1px) solid black;
+  touch-action: none;
 }
 
 .key-label {
@@ -84,14 +91,17 @@
   font-size: 18px;
   font-weight: bold;
   color: black;
+  touch-action: none;
 }
 
 .key-label-diatonic {
   color: black;
+  touch-action: none;
 }
 
 .key-label-accidental {
   color: white;
+  touch-action: none;
 }
 
 .key-left-divider-diatonic {
@@ -103,6 +113,7 @@
   height: calc(((var(--key-wheel-size) / 2) - 1) * 1px); /* ?? */
   box-shadow: 0 0 0 1px black;
   transform-origin: bottom center;
+  touch-action: none;
 }
 
 .key-left-divider-accidental {
@@ -114,6 +125,7 @@
   height: calc(((var(--key-wheel-size) / 2) - 100) * 1px); /* ?? */
   box-shadow: 0 0 0 1px black;
   transform-origin: bottom center;
+  touch-action: none;
 }
 
 .key-center-wheel {
@@ -126,6 +138,7 @@
   border-radius: 50%;
   box-shadow: 0 0 0 10px white;
   z-index: 400;
+  touch-action: none;
 }
 
 .center-wheel {
@@ -141,5 +154,6 @@
   border-radius: 50%;
   box-shadow: 0 0 0 2px black;
   z-index: 500;
+  touch-action: none;
 }
 
