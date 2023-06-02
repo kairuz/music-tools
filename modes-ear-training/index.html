@@ -73,11 +73,11 @@
 import {FretboardBuilder} from "./fretboard/fretboard.js";
 import ScaleUi from "./scale-ui.js";
 import WebAudioFontPlayer from "https://kairuz.github.io/webaudiofont/npm/dist/player.js";
-import * as domain from "https://kairuz.github.io/modality/domain.js";
-import * as glossary from "https://kairuz.github.io/modality/glossary.js";
+import {SCALES, SCALE_NAMES, MODES_NAMES,
+  SCALES_NAMES_MODES_NAMES, SCALE_NAME_MAJOR} from "https://kairuz.github.io/modality/glossary.js";
+
 
 const audioContext = new AudioContext();
-
 
 window.addEventListener('load', () => {
 
@@ -166,11 +166,11 @@ window.addEventListener('load', () => {
       scaleIndexIncludes.forEach((scaleIndexInclude) => scaleIndexIncludesForRound.add(scaleIndexInclude));
 
       const scaleIndexIncludesArr = Array.from(scaleIndexIncludes.values());
-      const scaleIndexExcludesArr = Array.from(domain.SCALES.keys()).filter((i) => !scaleIndexIncludes.has(i));
+      const scaleIndexExcludesArr = Array.from(SCALES.keys()).filter((i) => !scaleIndexIncludes.has(i));
 
       expectedScaleNameIndex = scaleIndexIncludesArr[Math.trunc(Math.random() * scaleIndexIncludesArr.length)];
-      expectedScaleName = glossary.SCALE_NAMES[expectedScaleNameIndex];
-      const expectedScaleModeNames = glossary.SCALES_MODES_NAMES[expectedScaleNameIndex];
+      expectedScaleName = SCALE_NAMES[expectedScaleNameIndex];
+      const expectedScaleModeNames = MODES_NAMES[expectedScaleNameIndex];
       expectedModeNameIndex = Math.trunc(Math.random() * expectedScaleModeNames.length);
       expectedModeName = expectedScaleModeNames[expectedModeNameIndex];
       console.log(`(CHEAT...) expected ${expectedScaleName} - ${expectedModeName}`);
@@ -184,7 +184,7 @@ window.addEventListener('load', () => {
           .map((scaleIndexExclude) => scaleUis[scaleIndexExclude])
           .forEach((scaleUi) => scaleUi.getModeAnswerButtons().forEach((modeButton) => modeButton.setAttribute('disabled' , 'disabled')));
 
-      const expectedScale = domain.SCALES[expectedScaleNameIndex];
+      const expectedScale = SCALES[expectedScaleNameIndex];
       fretboardDiv.classList.remove('visible');
       fretboardDiv.classList.add('hidden');
       const name = `C - ${expectedScaleName} - ${expectedModeName}`;
@@ -210,7 +210,7 @@ window.addEventListener('load', () => {
 
   const play = (scaleNameIndex, modeNameIndex) => {
     const playOctave = (delayFactor, playOctaves, sustainFactor = delayFactor * 1.4, octave = 4) => {
-      const scale = domain.SCALES[scaleNameIndex];
+      const scale = SCALES[scaleNameIndex];
       const flags = scale.getModeFlags(modeNameIndex);
 
       for (let i = 0; i <= flags.length * playOctaves; i++) {
@@ -331,9 +331,8 @@ window.addEventListener('load', () => {
   const allModeAnswerButtons = [];
   const allModePlayButtons = [];
 
-  const scaleUis = glossary.SCALES_NAMES_PATTERNS_MODES_NAMES.map(([scaleName, scalePattern, modeNames], scaleIndex) => {
-    const scale = domain.SCALES[scaleIndex];
-    return ScaleUi(scaleIndex, scale, scaleName, modeNames, scaleName === glossary.SCALE_NAME_MAJOR,
+  const scaleUis = SCALES_NAMES_MODES_NAMES.map(([scale, scaleName, modeNames], scaleIndex) => {
+    return ScaleUi(scaleIndex, scale, scaleName, modeNames, scaleName === SCALE_NAME_MAJOR,
                    allModeAnswerButtons, allModePlayButtons, scaleIndexIncludes, scaleIndexIncludesForRound,
                    () => expectedScaleName, () => expectedModeName, answer, loadAudio, play, stop);
   });
