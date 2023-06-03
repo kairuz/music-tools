@@ -5,14 +5,14 @@ import {indexForKeyName} from "https://kairuz.github.io/modality/glossary.js"
 // E4 B3 G3 D3 A2 E2
 const STANDARD_TUNING = [[4, 'E'], [3, 'B'], [3, 'G'], [3, 'D'], [2, 'A'], [2, 'E']];
 
-const DEFAULT_FRET_WIDTH = 80;
-const DEFAULT_FRET_BAR_WIDTH = 4;
-const DEFAULT_GUITARSTRING_SPACE = 40;
-const DEFAULT_NO_OF_FRETS = 6;
-const DEFAULT_MUTE_NOTE_DIV_SIZE = 4;
-const DEFAULT_NOTE_DIV_SIZE = 30;
-const DEFAULT_FRET_MARKER_DIV_SIZE = 20;
-const DEFAULT_SCALE_NAME_FONT_SIZE = 18;
+const DEFAULT_FRET_WIDTH            = 80;
+const DEFAULT_FRET_BAR_WIDTH        = 4;
+const DEFAULT_GUITARSTRING_SPACE    = 40;
+const DEFAULT_NO_OF_FRETS           = 6;
+const DEFAULT_MUTE_NOTE_DIV_SIZE    = 4;
+const DEFAULT_NOTE_DIV_SIZE         = 30;
+const DEFAULT_FRET_MARKER_DIV_SIZE  = 20;
+const DEFAULT_NAME_FONT_SIZE        = 18;
 
 const FRET_MARKERS = [0, 3, 5, 7, 9];
 
@@ -48,7 +48,7 @@ const FretboardBuilder = () => {
   let noteDivSize                   = DEFAULT_NOTE_DIV_SIZE;
   let fretMarkerDivSize             = DEFAULT_FRET_MARKER_DIV_SIZE;
   let muteNoteDivSize               = DEFAULT_MUTE_NOTE_DIV_SIZE;
-  let scaleNameFontSize             = DEFAULT_SCALE_NAME_FONT_SIZE;
+  let scaleNameFontSize             = DEFAULT_NAME_FONT_SIZE;
 
   const resize = (factor) => {
     fretWidth         = DEFAULT_FRET_WIDTH * factor;
@@ -57,7 +57,7 @@ const FretboardBuilder = () => {
     noteDivSize       = DEFAULT_NOTE_DIV_SIZE * factor;
     fretMarkerDivSize = DEFAULT_FRET_MARKER_DIV_SIZE * factor;
     muteNoteDivSize   = DEFAULT_MUTE_NOTE_DIV_SIZE * factor;
-    scaleNameFontSize = DEFAULT_SCALE_NAME_FONT_SIZE * factor;
+    scaleNameFontSize = DEFAULT_NAME_FONT_SIZE * factor;
   };
 
   const thiz = {
@@ -102,7 +102,7 @@ const Fretboard = (
     _noteDivSize                  = DEFAULT_NOTE_DIV_SIZE,
     _fretMarkerDivSize            = DEFAULT_FRET_MARKER_DIV_SIZE,
     _muteNoteDivSize              = DEFAULT_MUTE_NOTE_DIV_SIZE,
-    _scaleNameFontSize            = DEFAULT_SCALE_NAME_FONT_SIZE
+    _nameFontSize                 = DEFAULT_NAME_FONT_SIZE
 ) => {
 
   let isLeftHanded = false;
@@ -249,7 +249,7 @@ const Fretboard = (
   const noteDivSize = _noteDivSize;
   const fretMarkerDivSize = _fretMarkerDivSize;
   const muteNoteDivSize = _muteNoteDivSize;
-  const scaleNameFontSize = _scaleNameFontSize;
+  const nameFontSize = _nameFontSize;
   const fretBarDivs = [];
   const fretMarkerDivs = [];
   const guitarstringDivs = [];
@@ -261,13 +261,13 @@ const Fretboard = (
   const fretboardParentDiv = document.createElement('div');
   const fretboardBorderSize = (noteDivSize + muteNoteDivSize);
   const fretboardParentDivSize = fretboardDivSize + (fretboardBorderSize * 2);
-  const scaleNameDiv = document.createElement('div');
+  const nameDiv = document.createElement('div');
   const neckWidth = guitarstringSpace * guitarstrings.length;
   const neckLength = (fretWidth * (noOfFrets - 1)) + noteDivSize;
-  const scaleNameDivSize = fretboardParentDivSize - neckWidth - (fretboardBorderSize * 2);
+  const nameDivSize = fretboardParentDivSize - neckWidth - (fretboardBorderSize * 2);
 
-  const layoutManager = FretboardLayoutManager(fretBarDivs, fretMarkerDivs, FRET_MARKERS, guitarstringDivs, noteDivs, scaleNameDiv, muteDivPairs, fretboardDiv, guitarstrings,
-      fretWidth, fretBarWidth, guitarstringSpace, noOfFrets, noteDivSize, fretMarkerDivSize, muteNoteDivSize, neckWidth, fretboardBorderSize, scaleNameDivSize);
+  const layoutManager = FretboardLayoutManager(fretBarDivs, fretMarkerDivs, FRET_MARKERS, guitarstringDivs, noteDivs, nameDiv, muteDivPairs, fretboardDiv, guitarstrings,
+      fretWidth, fretBarWidth, guitarstringSpace, noOfFrets, noteDivSize, fretMarkerDivSize, muteNoteDivSize, neckWidth, fretboardBorderSize, nameDivSize);
 
   fretboardParentDiv.setAttribute('class', 'fretboardParent');
   fretboardParentDiv.style['box-sizing'] = 'border-box';
@@ -275,7 +275,7 @@ const Fretboard = (
   fretboardParentDiv.style['width'] = `${fretboardParentDivSize}px`;
   fretboardParentDiv.style['height'] = `${fretboardParentDivSize}px`;
   fretboardParentDiv.appendChild(fretboardAndBorderDiv);
-  fretboardParentDiv.appendChild(scaleNameDiv);
+  fretboardParentDiv.appendChild(nameDiv);
 
   fretboardAndBorderDiv.setAttribute('class', 'fretboardAndBorder');
   fretboardAndBorderDiv.style['position'] = 'absolute';
@@ -289,14 +289,14 @@ const Fretboard = (
   fretboardDiv.style['position'] = 'absolute';
   fretboardDiv.style['outline'] = '1px solid LightGrey';
 
-  scaleNameDiv.setAttribute('class', 'scaleName');
-  scaleNameDiv.style['position'] = 'absolute';
-  scaleNameDiv.style['width'] = `${scaleNameDivSize}px`;
-  scaleNameDiv.style['height'] = `${scaleNameDivSize}px`;
-  scaleNameDiv.style['color'] = 'black';
-  scaleNameDiv.style['font-size'] = `${scaleNameFontSize}px`;
-  scaleNameDiv.style['font-weight'] = 'bold';
-  scaleNameDiv.style['word-break'] = 'break-word';
+  nameDiv.setAttribute('class', 'name');
+  nameDiv.style['position'] = 'absolute';
+  nameDiv.style['width'] = `${nameDivSize}px`;
+  nameDiv.style['height'] = `${nameDivSize}px`;
+  nameDiv.style['color'] = 'black';
+  nameDiv.style['font-size'] = `${nameFontSize}px`;
+  nameDiv.style['font-weight'] = 'bold';
+  nameDiv.style['word-break'] = 'break-word';
 
   for (let i = 0; i < noOfFrets; i++) {
     const fretBarDiv = document.createElement('div');
@@ -403,10 +403,10 @@ const Fretboard = (
   }
 
   let selectedModeFlagsAndName = null;
+  let selectedChordAndName = null;
 
   const applyMode = (modeFlags, name, noteDivCallback) => {
-    // scaleNameDiv.innerHTML = `${scale.getName()}`;
-    scaleNameDiv.innerHTML = `${name}`;
+    nameDiv.innerHTML = `${name}`;
     guitarstrings.forEach(([_, guitarstringNote], guitarstringIndex) => {
       const guitarstringNoteIndex = indexForKeyName(guitarstringNote);
       let degree = (() => {
@@ -428,39 +428,115 @@ const Fretboard = (
     });
   };
 
-  const selectMode = (modeFlags, name) => {
+  const unapplySelectedMode = () => {
+    const [selectedModeFlags, selectedName] = selectedModeFlagsAndName;
+    applyMode(selectedModeFlags, selectedName, (degree, fret, guitarstringIndex) => {
+      if (fret === 0) {
+        noteDivs[guitarstringIndex][fret].style['border'] = null;
+      }
+      else {
+        noteDivs[guitarstringIndex][fret].style['background'] = 'transparent';
+      }
+      noteDivs[guitarstringIndex][fret].textContent = '';
+    });
+  };
+
+  const applySelectedMode = () => {
+    const [selectedModeFlags, selectedName] = selectedModeFlagsAndName;
+    applyMode(selectedModeFlags, selectedName, (degree, fret, guitarstringIndex) => {
+      if (fret === 0) {
+        noteDivs[guitarstringIndex][fret].style['border'] = `${muteNoteDivSize}px solid black`;
+      }
+      else {
+        noteDivs[guitarstringIndex][fret].style['background'] = 'black';
+      }
+      noteDivs[guitarstringIndex][fret].textContent = `${degree}`;
+    });
+  };
+
+  const applyChord = (chord, name, noteDivCallback, openNoteDivCallback, muteNoteDivCallback) => {
+    nameDiv.innerHTML = `${name}`;
+
+    const guitarstringFretIndexesEntries = Object.entries(chord);
+
+    const stringFretIndexesKeys = guitarstringFretIndexesEntries.map((guitarstringFretIndexesEntry) => guitarstringFretIndexesEntry[0]);
+    const guitarstringsKeys = Object.keys(guitarstrings);
+
+    const openGuitarstringIndexes = guitarstringFretIndexesEntries
+        .filter((stringFretIndexesEntry) => stringFretIndexesEntry[1] === 0)
+        .map((stringFretIndexesEntry) => stringFretIndexesEntry[0]);
+    const mutedGuitarstringIndexes = guitarstringsKeys
+        .filter((guitarstringKey) => !stringFretIndexesKeys.includes(guitarstringKey));
+
+    mutedGuitarstringIndexes.forEach((mutedGuitarstringIndex) => muteDivPairs[mutedGuitarstringIndex].forEach(muteNoteDivCallback));
+    openGuitarstringIndexes.forEach((openGuitarstringIndex) => openNoteDivCallback(noteDivs[openGuitarstringIndex][0]));
+
+    guitarstringFretIndexesEntries.forEach((guitarstringFretIndexesEntry) => {
+      const guitarstringIndex = guitarstringFretIndexesEntry[0];
+      const fretInd = guitarstringFretIndexesEntry[1];
+      if (fretInd === 0) {
+        return;
+      }
+      const noteDiv = noteDivs[guitarstringIndex][fretInd];
+      noteDivCallback(noteDiv);
+    });
+  };
+
+  const unapplySelectedChord = () => {
+    const [selectedChord, selectedName] = selectedChordAndName;
+    applyChord(
+        selectedChord, selectedName,
+        (noteDiv) => noteDiv.style['background'] = 'transparent',
+        (openDiv) => openDiv.style['border'] = null,
+        (muteDiv) => muteDiv.style['background'] = 'transparent');
+  };
+
+  const applySelectedChord = () => {
+    const [selectedChord, selectedName] = selectedChordAndName;
+    applyChord(
+        selectedChord, selectedName,
+        (noteDiv) => noteDiv.style['background'] = 'black',
+        (openDiv) => openDiv.style['border'] = `${muteNoteDivSize}px solid black`,
+        (muteDiv) => muteDiv.style['background'] = 'black');
+  };
+
+  const unapplySelected = () => {
     if (selectedModeFlagsAndName !== null) {
-      const [selectedModeFlags, selectedName] = selectedModeFlagsAndName;
-      applyMode(selectedModeFlags, selectedName, (degree, fret, guitarstringIndex) => {
-        if (fret === 0) {
-          noteDivs[guitarstringIndex][fret].style['border'] = null;
-        }
-        else {
-          noteDivs[guitarstringIndex][fret].style['background'] = 'transparent';
-        }
-        noteDivs[guitarstringIndex][fret].textContent = '';
-      });
+      unapplySelectedMode();
     }
+    else if (selectedChordAndName !== null) {
+      unapplySelectedChord();
+    }
+  };
 
+  const applySelected = () => {
+    if (selectedModeFlagsAndName !== null) {
+      applySelectedMode();
+    }
+    else if (selectedChordAndName !== null) {
+      applySelectedChord();
+    }
+  };
+
+  const selectMode = (modeFlags, name) => {
+    unapplySelected();
+    selectedChordAndName = null;
     selectedModeFlagsAndName = [modeFlags, name];
+    applySelected();
+  };
 
-    {
-      applyMode(modeFlags, name, (degree, fret, guitarstringIndex) => {
-        if (fret === 0) {
-          noteDivs[guitarstringIndex][fret].style['border'] = `${muteNoteDivSize}px solid black`;
-        }
-        else {
-          noteDivs[guitarstringIndex][fret].style['background'] = 'black';
-        }
-        noteDivs[guitarstringIndex][fret].textContent = `${degree}`;
-      });
-    }
+  const selectChord = (chord, name) => {
+    unapplySelected();
+    selectedModeFlagsAndName = null;
+    selectedChordAndName = [chord, name];
+    applySelected();
   };
 
   loadLayout();
 
   return {
     selectMode,
+    selectChord,
     setLeftHanded,
     setRightHanded,
     setHorizontal,
@@ -480,7 +556,7 @@ const Fretboard = (
     getFretboardDivSize: () => fretboardDivSize,
     getFretboardBorderSize: () => fretboardBorderSize,
     getFretboardParentDivSize: () => fretboardParentDivSize,
-    getScaleNameDivSize: () => scaleNameDivSize,
+    getScaleNameDivSize: () => nameDivSize,
 
     getGuitarstrings: () => guitarstrings,
     getLabelledRadiosClickCallbacks: () => labelledRadiosClickCallbacks,
@@ -493,16 +569,34 @@ const Fretboard = (
   };
 };
 
+const CHORD_C_MAJ         = Object.freeze([{0: 0, 1: 1, 2: 0, 3: 2, 4: 3},        'C Major']);
+const CHORD_C_MAJ_OVER_G  = Object.freeze([{0: 0, 1: 1, 2: 0, 3: 2, 4: 3, 5: 3},  'C Major over G']);
+const CHORD_D_MAJ         = Object.freeze([{0: 2, 1: 3, 2: 2, 3: 0},              'D Major']);
+const CHORD_D_MIN         = Object.freeze([{0: 1, 1: 3, 2: 2, 3: 0},              'D Minor']);
+const CHORD_D_MIN_7       = Object.freeze([{0: 1, 1: 1, 2: 2, 3: 0},              'D Minor Seventh']);
+const CHORD_D_DOM_7       = Object.freeze([{0: 2, 1: 1, 2: 2, 3: 0},              'D Dominant Seventh']);
+const CHORD_E_MAJ         = Object.freeze([{0: 0, 1: 0, 2: 1, 3: 2, 4: 2, 5: 0},  'E Major']);
+const CHORD_E_MIN         = Object.freeze([{0: 0, 1: 0, 2: 0, 3: 2, 4: 2, 5: 0},  'E Minor']);
+const CHORD_F_MAJ         = Object.freeze([{0: 1, 1: 1, 2: 2, 3: 3, 4: 3, 5: 1},  'F Major']);
+const CHORD_F_MIN         = Object.freeze([{0: 1, 1: 1, 2: 1, 3: 3, 4: 3, 5: 1},  'F Minor']);
+const CHORD_A_MAJ         = Object.freeze([{0: 0, 1: 2, 2: 2, 3: 2, 4: 0},        'A Major']);
+const CHORD_A_MIN         = Object.freeze([{0: 0, 1: 1, 2: 2, 3: 2, 4: 0},        'A Minor']);
+const CHORD_B_MAJ         = Object.freeze([{0: 2, 1: 4, 2: 4, 3: 4, 4: 2},        'B Major']);
+const CHORD_B_MIN         = Object.freeze([{0: 2, 1: 3, 2: 4, 3: 4, 4: 2},        'B Minor']);
+const CHORD_G_MAJ         = Object.freeze([{0: 3, 1: 0, 2: 0, 3: 0, 4: 2, 5: 3},  'G Major']);
+const CHORD_G_MIN         = Object.freeze([{0: 3, 1: 3, 2: 3, 3: 5, 4: 5, 5: 3},  'G Minor']);
 
+const CHORDS = [CHORD_C_MAJ, CHORD_C_MAJ_OVER_G, CHORD_D_MAJ, CHORD_D_MIN, CHORD_D_MIN_7,
+                CHORD_D_DOM_7, CHORD_E_MAJ, CHORD_E_MIN, CHORD_F_MAJ, CHORD_F_MIN, CHORD_A_MAJ,
+                CHORD_A_MIN, CHORD_B_MAJ, CHORD_B_MIN, CHORD_G_MAJ, CHORD_G_MIN];
 
 export {
-  STANDARD_TUNING,
-  DEFAULT_FRET_WIDTH,
-  DEFAULT_FRET_BAR_WIDTH,
-  DEFAULT_GUITARSTRING_SPACE,
-  DEFAULT_NO_OF_FRETS,
-  DEFAULT_MUTE_NOTE_DIV_SIZE,
-  DEFAULT_NOTE_DIV_SIZE,
+  STANDARD_TUNING, DEFAULT_FRET_WIDTH, DEFAULT_FRET_BAR_WIDTH, DEFAULT_GUITARSTRING_SPACE,
+  DEFAULT_NO_OF_FRETS, DEFAULT_MUTE_NOTE_DIV_SIZE, DEFAULT_NOTE_DIV_SIZE,
+  CHORD_C_MAJ, CHORD_C_MAJ_OVER_G, CHORD_D_MAJ, CHORD_D_MIN, CHORD_D_MIN_7,
+  CHORD_D_DOM_7, CHORD_E_MAJ, CHORD_E_MIN, CHORD_F_MAJ, CHORD_F_MIN, CHORD_A_MAJ,
+  CHORD_A_MIN, CHORD_B_MAJ, CHORD_B_MIN, CHORD_G_MAJ, CHORD_G_MIN,
+  CHORDS,
   LabelledRadiosClickCallbacks,
   FretboardBuilder,
   Fretboard

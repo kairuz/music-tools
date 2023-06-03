@@ -36,7 +36,7 @@
       display: inline-block;
     }
 
-    .scale-name {
+    .name {
       width: 200px;
       height: 40px;
     }
@@ -70,11 +70,11 @@
 
 <script type="module">
 
-import {FretboardBuilder} from "./fretboard/fretboard.js";
-import ScaleUi from "./scale-ui.js";
+import {FretboardBuilder} from "https://kairuz.github.io/music-tools/fretboard/fretboard.js";
 import WebAudioFontPlayer from "https://kairuz.github.io/webaudiofont/npm/dist/player.js";
 import {SCALES, SCALE_NAMES, MODES_NAMES,
   SCALES_NAMES_MODES_NAMES, SCALE_NAME_MAJOR} from "https://kairuz.github.io/modality/glossary.js";
+import ScaleUi from "./scale-ui.js";
 
 
 const audioContext = new AudioContext();
