@@ -2,7 +2,7 @@ const ScaleUi = (scaleIndex, scale, scaleName, modeNames, include,
                  allModeAnswerButtons, allModePlayButtons,
                  scaleIndexIncludes, scaleIndexIncludesForRound,
                  getExpectedScaleName, getExpectedModeName, answer,
-                 loadAudio, play, stop) => {
+                 audioLoader, play, stop) => {
   const div = document.createElement('div');
   div.classList.add('scale');
 
@@ -54,7 +54,7 @@ const ScaleUi = (scaleIndex, scale, scaleName, modeNames, include,
     modePlayButton.textContent = String.fromCodePoint(128266);
     modeDiv.appendChild(modePlayButton);
     modePlayButton.addEventListener('click', () => {
-      loadAudio().then(() => {
+      audioLoader.get().then(() => {
         stop();
         play(scaleIndex, i);
       });
