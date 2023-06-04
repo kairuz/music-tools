@@ -1,0 +1,68 @@
+<html>
+<head>
+<style>
+* {
+  box-sizing: border-box;
+  font-family: "Lucida Grande", sans-serif;
+}
+#config {
+  position: fixed;
+  z-index: 100;
+  background: white;
+}
+#chords {
+  margin-left: 80px;
+}
+</style>
+<script type="module">
+
+import * as fretboardLib from "./fretboard.js";
+
+
+window.addEventListener('load', () => {
+
+  const chordsDiv = document.getElementById('chords');
+
+  const labelledRadiosClickCallbacks = fretboardLib.LabelledRadiosClickCallbacks(
+      () => fretboards.slice(1, fretboards.length).forEach((fretboard) => fretboard.setRightHanded()),
+      () => fretboards.slice(1, fretboards.length).forEach((fretboard) => fretboard.setLeftHanded()),
+      () => fretboards.slice(1, fretboards.length).forEach((fretboard) => fretboard.setVertical()),
+      () => fretboards.slice(1, fretboards.length).forEach((fretboard) => fretboard.setHorizontal())
+  );
+
+  const fretboards = fretboardLib.CHORDS.map((chord, i) => {
+    const fretboard = fretboardLib.FretboardBuilder()
+        .large()
+        .ofNoOfFrets(7)
+        .ofLabelledRadiosClickCallbacks(labelledRadiosClickCallbacks)
+        .build();
+    fretboard.setHorizontal();
+    fretboard.selectChord(...chord);
+    return fretboard;
+  });
+
+  fretboards.forEach((fretboard, i) => {
+    const div = document.createElement('div');
+    div.style.display = 'inline-block';
+    div.style.position = 'relative';
+    chordsDiv.appendChild(div);
+
+    if (i === 0) {
+      const configDiv = document.getElementById('config');
+      configDiv.appendChild(fretboard.getOrientationLabelledForm().getForm());
+      configDiv.appendChild(fretboard.getHandednessLabelledForm().getForm());
+    }
+
+    div.appendChild(fretboard.getFretboardParentDiv());
+  });
+
+});
+
+</script>
+</head>
+<body>
+<a style="margin: 10px; float: right;" href="https://www.github.com/kairuz/music-tools">GitHub</a>
+<div id="config"></div>
+<div id="chords"></div>
+</body>
+</html>
