@@ -588,6 +588,9 @@ const CHORD_F_MAJ         = Object.freeze([{0: 1, 1: 1, 2: 2, 3: 3, 4: 3, 5: 1},
 const CHORD_F_MIN         = Object.freeze([{0: 1, 1: 1, 2: 1, 3: 3, 4: 3, 5: 1},  'F Minor']);
 const CHORD_F_MIN_7       = Object.freeze([{0: 1, 1: 1, 2: 1, 3: 1, 4: 3, 5: 1},  'F Minor Seventh']);
 const CHORD_F_DOM_7       = Object.freeze([{0: 1, 1: 1, 2: 2, 3: 1, 4: 3, 5: 1},  'F Dominant Seventh']);
+const CHORD_G_MAJ         = Object.freeze([{0: 3, 1: 0, 2: 0, 3: 0, 4: 2, 5: 3},  'G Major']);
+const CHORD_G_MIN         = Object.freeze([{0: 3, 1: 3, 2: 3, 3: 5, 4: 5, 5: 3},  'G Minor']);
+const CHORD_G_DOM_7       = Object.freeze([{0: 1, 1: 0, 2: 0, 3: 0, 4: 2, 5: 3},  'G Dominant Seventh']);
 const CHORD_A_MAJ         = Object.freeze([{0: 0, 1: 2, 2: 2, 3: 2, 4: 0},        'A Major']);
 const CHORD_A_MAJ_7       = Object.freeze([{0: 0, 1: 2, 2: 1, 3: 2, 4: 0},        'A Major Seventh']);
 const CHORD_A_MIN         = Object.freeze([{0: 0, 1: 1, 2: 2, 3: 2, 4: 0},        'A Minor']);
@@ -596,16 +599,14 @@ const CHORD_A_DOM_7       = Object.freeze([{0: 0, 1: 2, 2: 0, 3: 2, 4: 0},      
 const CHORD_B_MAJ         = Object.freeze([{0: 2, 1: 4, 2: 4, 3: 4, 4: 2},        'B Major']);
 const CHORD_B_MIN         = Object.freeze([{0: 2, 1: 3, 2: 4, 3: 4, 4: 2},        'B Minor']);
 const CHORD_B_DOM_7       = Object.freeze([{0: 2, 1: 0, 2: 2, 3: 1, 4: 2},        'B Dominant Seventh']);
-const CHORD_G_MAJ         = Object.freeze([{0: 3, 1: 0, 2: 0, 3: 0, 4: 2, 5: 3},  'G Major']);
-const CHORD_G_MIN         = Object.freeze([{0: 3, 1: 3, 2: 3, 3: 5, 4: 5, 5: 3},  'G Minor']);
-const CHORD_G_DOM_7       = Object.freeze([{0: 1, 1: 0, 2: 0, 3: 0, 4: 2, 5: 3},  'G Dominant Seventh']);
 
 const CHORDS = Object.freeze([CHORD_C_MAJ, CHORD_C_MAJ_7, CHORD_C_DOM_7, CHORD_C_MAJ_OVER_G, CHORD_C_MIN, CHORD_C_MIN_7,
                               CHORD_D_MAJ, CHORD_D_MAJ_OVER_Fs, CHORD_D_MAJ_7, CHORD_D_MIN, CHORD_D_MIN_7, CHORD_D_DOM_7,
                               CHORD_E_MAJ, CHORD_E_MIN, CHORD_E_MIN_7, CHORD_E_DOM_7,
                               CHORD_F_MAJ, CHORD_F_MIN, CHORD_F_MIN_7, CHORD_F_DOM_7,
+                              CHORD_G_MAJ, CHORD_G_MIN, CHORD_G_DOM_7,
                               CHORD_A_MAJ, CHORD_A_MAJ_7, CHORD_A_MIN, CHORD_A_MIN_7, CHORD_A_DOM_7,
-                              CHORD_B_MAJ, CHORD_B_MIN, CHORD_B_DOM_7, CHORD_G_MAJ, CHORD_G_MIN, CHORD_G_DOM_7]);
+                              CHORD_B_MAJ, CHORD_B_MIN, CHORD_B_DOM_7]);
 
 
 export {
@@ -615,8 +616,9 @@ export {
   CHORD_D_MAJ, CHORD_D_MAJ_OVER_Fs, CHORD_D_MAJ_7, CHORD_D_MIN, CHORD_D_MIN_7, CHORD_D_DOM_7,
   CHORD_E_MAJ, CHORD_E_MIN, CHORD_E_MIN_7, CHORD_E_DOM_7,
   CHORD_F_MAJ, CHORD_F_MIN, CHORD_F_MIN_7, CHORD_F_DOM_7,
+  CHORD_G_MAJ, CHORD_G_MIN, CHORD_G_DOM_7,
   CHORD_A_MAJ, CHORD_A_MAJ_7, CHORD_A_MIN, CHORD_A_MIN_7, CHORD_A_DOM_7,
-  CHORD_B_MAJ, CHORD_B_MIN, CHORD_B_DOM_7, CHORD_G_MAJ, CHORD_G_MIN, CHORD_G_DOM_7,
+  CHORD_B_MAJ, CHORD_B_MIN, CHORD_B_DOM_7,
   CHORDS,
   LabelledRadiosClickCallbacks,
   FretboardBuilder,
