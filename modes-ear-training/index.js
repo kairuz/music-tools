@@ -15,27 +15,37 @@ window.addEventListener('load', () => {
   const webAudioFontPresetPath = 'https://surikov.github.io/webaudiofontdata/sound/0253_Acoustic_Guitar_sf2_file.js';
   const webAudioFontPresetVarName = '_tone_0253_Acoustic_Guitar_sf2_file';
 
-  const webAudioLazyLoader = (() => {
-    const buildPromise = () => {
-      return new Promise((resolve) => {
-        webAudioFontPlayer.loader.startLoad(audioContext, webAudioFontPresetPath, webAudioFontPresetVarName);
-        webAudioFontPlayer.loader.waitLoad(() => {
-          resolve();
-        });
+  const webAudioFontLoader = LazyLoader(() => {
+    return new Promise((resolve) => {
+      webAudioFontPlayer.loader.startLoad(audioContext, webAudioFontPresetPath, webAudioFontPresetVarName);
+      webAudioFontPlayer.loader.waitLoad(() => {
+        resolve();
       });
-    };
+    });
+  });
 
-    let promise = null;
-
-    return {
-      get: () => {
-        if (promise === null) {
-          promise = buildPromise();
+  const audioLoader = LazyLoader(() => {
+    return new Promise((resolve, reject) => {
+      // "suspended" | "running" | "closed";
+      console.log('audioContext.state ' + audioContext.state);
+      switch (audioContext.state) {
+        case 'suspended': {
+          audioContext
+              .resume()
+              .then(resolve);
+          return;
         }
-        return promise;
+        case 'running': {
+          resolve();
+          return;
+        }
+        default: {
+          reject('invalid audioContext state');
+          return;
+        }
       }
-    }
-  })();
+    }).then(() => webAudioFontLoader.get());
+  });
 
   let expectedScaleNameIndex = null;
   let expectedScaleName = null;
@@ -64,29 +74,6 @@ window.addEventListener('load', () => {
       }
     };
   })();
-
-  const audioLoader = LazyLoader(() => {
-    return new Promise((resolve, reject) => {
-      // "suspended" | "running" | "closed";
-      console.log('audioContext.state ' + audioContext.state);
-      switch (audioContext.state) {
-        case 'suspended': {
-          audioContext
-              .resume()
-              .then(resolve);
-          return;
-        }
-        case 'running': {
-          resolve();
-          return;
-        }
-        default: {
-          reject('invalid audioContext state');
-          return;
-        }
-      }
-    }).then(() => webAudioLazyLoader.get());
-  });
 
   const ask = () => {
     audioLoader.get().then(() => {
