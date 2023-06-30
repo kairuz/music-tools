@@ -2,7 +2,7 @@ import {FretboardBuilder} from "https://kairuz.github.io/music-tools/fretboard/f
 import WebAudioFontPlayer from "https://kairuz.github.io/webaudiofont/npm/dist/player.js";
 import {LazyLoader} from "https://kairuz.github.io/modality/util.js";
 import {SCALES, SCALE_NAMES, MODES_NAMES,
-  SCALES_NAMES_MODES_NAMES, SCALE_NAME_MAJOR} from "https://kairuz.github.io/modality/glossary.js";
+  SCALES_NAMES_MODES_NAMES} from "https://kairuz.github.io/modality/glossary.js";
 import ScaleUi from "./scale-ui.js";
 
 
@@ -247,12 +247,46 @@ window.addEventListener('load', () => {
   const allModeAnswerButtons = [];
   const allModePlayButtons = [];
 
+  let disabledIncludeCheckboxIndex = 0;
+
+  const includeCallback = (scaleIndex) => {
+    if (scaleIndexIncludes.size === 1 &&
+        disabledIncludeCheckboxIndex !== null &&
+        scaleUis[disabledIncludeCheckboxIndex].getIncludeCheckbox().checked === false) {
+      scaleUis[disabledIncludeCheckboxIndex].getIncludeCheckbox().checked = true;
+    }
+    scaleIndexIncludes.add(scaleIndex);
+    if (scaleIndexIncludes.size === 1) {
+      return;
+    }
+    if (disabledIncludeCheckboxIndex !== null) {
+      scaleUis[disabledIncludeCheckboxIndex].getIncludeCheckbox().disabled = false;
+      disabledIncludeCheckboxIndex = null;
+    }
+  };
+
+  const excludeCallback = (scaleIndex) => {
+    if (scaleIndexIncludes.size === 1) {
+      if (disabledIncludeCheckboxIndex !== null &&
+          scaleUis[disabledIncludeCheckboxIndex].getIncludeCheckbox().checked === false) {
+        scaleUis[disabledIncludeCheckboxIndex].getIncludeCheckbox().checked = true
+      }
+      return;
+    }
+    scaleIndexIncludes.delete(scaleIndex);
+    if (scaleIndexIncludes.size === 1) {
+      disabledIncludeCheckboxIndex = scaleIndexIncludes.values().next().value;
+      scaleUis[disabledIncludeCheckboxIndex].getIncludeCheckbox().disabled = true;
+    }
+  };
+
   const scaleUis = SCALES_NAMES_MODES_NAMES.map(([scale, scaleName, modeNames], scaleIndex) => {
-    return ScaleUi(scaleIndex, scale, scaleName, modeNames, scaleName === SCALE_NAME_MAJOR,
+    return ScaleUi(scaleIndex, scale, scaleName, modeNames, scaleIndex === 0,
                    allModeAnswerButtons, allModePlayButtons, scaleIndexIncludes, scaleIndexIncludesForRound,
-                   () => expectedScaleName, () => expectedModeName, answer, audioLoader, play, stop);
+                   () => expectedScaleName, () => expectedModeName, answer, audioLoader, play, stop, includeCallback, excludeCallback);
   });
 
+  scaleUis[0].getIncludeCheckbox().disabled = true;
   scaleUis.forEach((scaleUi) => appDiv.appendChild(scaleUi.getDiv()));
 
   appDiv.appendChild(document.createElement('br'));

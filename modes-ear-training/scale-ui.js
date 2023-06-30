@@ -2,30 +2,39 @@ const ScaleUi = (scaleIndex, scale, scaleName, modeNames, include,
                  allModeAnswerButtons, allModePlayButtons,
                  scaleIndexIncludes, scaleIndexIncludesForRound,
                  getExpectedScaleName, getExpectedModeName, answer,
-                 audioLoader, play, stop) => {
+                 audioLoader, play, stop, includeCallback, excludeCallback) => {
   const div = document.createElement('div');
   div.classList.add('scale');
 
   const scaleHeaderDiv = document.createElement('div');
-  scaleHeaderDiv.classList.add('scale-name');
-  scaleHeaderDiv.textContent = scaleName;
 
   const includeCheckbox = document.createElement('input');
-  includeCheckbox.setAttribute('type', 'checkbox');
+  includeCheckbox.type = 'checkbox';
+  const includeCheckboxId = `scaleToggleCheckbox_${scaleIndex}`;
+  includeCheckbox.id = includeCheckboxId;
+  includeCheckbox.classList.add('toggle');
+  includeCheckbox.checked = include;
+
+  const includeCheckboxLabel = document.createElement('label');
+  includeCheckboxLabel.htmlFor = includeCheckboxId;
+  includeCheckboxLabel.id = `${includeCheckboxId}_label`;
+  includeCheckboxLabel.appendChild(document.createTextNode(scaleName));
 
   scaleHeaderDiv.appendChild(includeCheckbox);
+  scaleHeaderDiv.appendChild(includeCheckboxLabel);
   if (include === true) {
-    includeCheckbox.checked = include;
     scaleIndexIncludes.add(scaleIndex);
   }
   includeCheckbox.addEventListener('click', () => {
     if (includeCheckbox.checked) {
-      scaleIndexIncludes.add(scaleIndex);
+      includeCallback(scaleIndex);
     }
     else {
-      scaleIndexIncludes.delete(scaleIndex);
+      excludeCallback(scaleIndex);
     }
   });
+
+
 
   div.appendChild(scaleHeaderDiv);
 
@@ -69,6 +78,7 @@ const ScaleUi = (scaleIndex, scale, scaleName, modeNames, include,
 
   return {
     getDiv: () => div,
+    getIncludeCheckbox: () => includeCheckbox,
     getModeAnswerButtons: () => modeAnswerButtons
   }
 };
