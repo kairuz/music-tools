@@ -1,4 +1,4 @@
-# music-tools
+# [music-tools](https://kairuz.github.io/music-tools)
 
 #### [Modes Ear Training](https://kairuz.github.io/music-tools/modes-ear-training/)
 A quiz tool for identifying the played scale mode. 
